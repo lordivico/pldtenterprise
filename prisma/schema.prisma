@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum PlanType {
+  FIBERBIZ_100
+  FIBERBIZ_300
+  AFFORDABOOST_500
+}
+
+enum OrgType {
+  SOLE_PROP
+  PARTNERSHIP
+  CORP
+  COOP
+}
+
+enum AppStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum DocType {
+  MAYORS_PERMIT
+  DTI
+  SEC
+  CDA
+  BOARD_RES
+  SEC_CERT
+  BIO_PAGE_ID
+  SPECIMEN_SIGS
+  ARTICLES_OF_PARTNERSHIP
+  PARTNERS_RESOLUTION
+}
+
+model Application {
+  id            String      @id @default(uuid())
+  plan_type     PlanType
+  org_type      OrgType
+  business_name String
+  business_address String
+  billing_address String
+  status        AppStatus   @default(PENDING)
+  created_at    DateTime    @default(now())
+  updated_at    DateTime    @updatedAt
+
+  signatories   Signatory[]
+  attachments   Attachment[]
+
+  @@map("applications")
+}
+
+model Signatory {
+  id                   String      @id @default(uuid())
+  application_id       String
+  name                 String
+  designation          String
+  contact_number       String
+  email                String
+  id_type              String
+  id_number            String
+  signature_path       String
+
+  application          Application @relation(fields: [application_id], references: [id], onDelete: Cascade)
+
+  @@index([application_id])
+  @@map("signatories")
+}
+
+model Attachment {
+  id                String   @id @default(uuid())
+  application_id    String
+  doc_type          DocType
+  file_path         String
+  original_filename String
+  uploaded_at       DateTime @default(now())
+
+  application       Application @relation(fields: [application_id], references: [id], onDelete: Cascade)
+
+  @@map("attachments")
+}
