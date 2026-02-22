@@ -37,14 +37,15 @@ export default function ApplicationForm() {
         const formData = new FormData();
 
         // 1. Append valid text fields
-        // We iterate over the data object and append keys that are not files/FileLists first
-        (Object.keys(data) as Array<keyof ApplicationFormValues>).forEach((key) => {
-            const value = data[key];
-            if (key === 'mayors_permit' || key === 'dti_registration' || key === 'sec_registration' ||
-                key === 'articles_of_partnership' || key === 'partners_resolution' || key === 'sec_certificate' ||
-                key === 'board_resolution' || key === 'cda_registration' || key === 'bio_page_id' ||
-                key === 'specimen_sigs') {
-                // Skip file fields here, handle separately to ensure correct extraction
+        const fileFields = [
+            'mayors_permit', 'dti_registration', 'sec_registration',
+            'articles_of_partnership', 'partners_resolution', 'sec_certificate',
+            'board_resolution', 'cda_registration', 'bio_page_id', 'specimen_sigs'
+        ];
+        Object.keys(data).forEach((k) => {
+            const key = k as string;
+            const value = (data as any)[key];
+            if (fileFields.includes(key)) {
                 return;
             }
             if (value !== undefined && value !== null) {
@@ -72,18 +73,18 @@ export default function ApplicationForm() {
         appendFile('specimen_sigs', data.specimen_sigs);
 
         // Conditional Docs
-        if (selectedOrgType === 'SOLE_PROP') {
+        if (data.org_type === 'SOLE_PROP') {
             appendFile('mayors_permit', data.mayors_permit);
             appendFile('dti_registration', data.dti_registration);
-        } else if (selectedOrgType === 'PARTNERSHIP') {
+        } else if (data.org_type === 'PARTNERSHIP') {
             appendFile('sec_registration', data.sec_registration);
             appendFile('articles_of_partnership', data.articles_of_partnership);
             appendFile('partners_resolution', data.partners_resolution);
-        } else if (selectedOrgType === 'CORP') {
+        } else if (data.org_type === 'CORP') {
             appendFile('sec_registration', data.sec_registration);
             appendFile('sec_certificate', data.sec_certificate);
             appendFile('board_resolution', data.board_resolution);
-        } else if (selectedOrgType === 'COOP') {
+        } else if (data.org_type === 'COOP') {
             appendFile('cda_registration', data.cda_registration);
             appendFile('board_resolution', data.board_resolution);
         }
@@ -141,15 +142,58 @@ export default function ApplicationForm() {
             {/* SECTION 3: Business Info (Common) */}
             <section className="space-y-4">
                 <h2 className="text-xl font-bold">3. Business Information</h2>
-                <div className="grid grid-cols-1 gap-4">
-                    <input {...register('business_name')} placeholder="Registered Business Name" className="p-2 border rounded" />
-                    {errors.business_name && <p className="text-red-500">{errors.business_name.message}</p>}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-1">
+                        <input {...register('business_name')} placeholder="Registered Business Name" className="p-2 border rounded w-full" />
+                        {errors.business_name && <p className="text-red-500 text-sm">{errors.business_name.message}</p>}
+                    </div>
+                    <div className="space-y-1">
+                        <input {...register('business_address')} placeholder="Business Address" className="p-2 border rounded w-full" />
+                        {errors.business_address && <p className="text-red-500 text-sm">{errors.business_address.message}</p>}
+                    </div>
 
-                    <input {...register('business_address')} placeholder="Business Address" className="p-2 border rounded" />
-                    {errors.business_address && <p className="text-red-500">{errors.business_address.message}</p>}
+                    <div className="space-y-1">
+                        <input {...register('billing_address')} placeholder="Billing Address" className="p-2 border rounded w-full" />
+                        {errors.billing_address && <p className="text-red-500 text-sm">{errors.billing_address.message}</p>}
+                    </div>
 
-                    <input {...register('billing_address')} placeholder="Billing Address" className="p-2 border rounded" />
-                    {errors.billing_address && <p className="text-red-500">{errors.billing_address.message}</p>}
+                    <div className="space-y-1">
+                        <select {...register('business_ownership')} className="p-2 border rounded w-full">
+                            <option value="">Select Ownership</option>
+                            <option value="Private">Private</option>
+                            <option value="Government">Government</option>
+                        </select>
+                        {errors.business_ownership && <p className="text-red-500 text-sm">{errors.business_ownership.message}</p>}
+                    </div>
+
+                    <div className="space-y-1">
+                        <select {...register('tax_profile')} className="p-2 border rounded w-full">
+                            <option value="">Select Tax Profile</option>
+                            <option value="VAT-Registered">VAT-Registered</option>
+                            <option value="VAT Exempt / Zero-Rated">VAT Exempt / Zero-Rated</option>
+                        </select>
+                        {errors.tax_profile && <p className="text-red-500 text-sm">{errors.tax_profile.message}</p>}
+                    </div>
+
+                    <div className="space-y-1">
+                        <input {...register('company_tin')} placeholder="Company TIN" className="p-2 border rounded w-full" />
+                        {errors.company_tin && <p className="text-red-500 text-sm">{errors.company_tin.message}</p>}
+                    </div>
+
+                    <div className="space-y-1">
+                        <input {...register('industry_type')} placeholder="Industry Type" className="p-2 border rounded w-full" />
+                        {errors.industry_type && <p className="text-red-500 text-sm">{errors.industry_type.message}</p>}
+                    </div>
+
+                    <div className="space-y-1">
+                        <input type="date" {...register('date_of_registration')} className="p-2 border rounded w-full text-gray-500" />
+                        {errors.date_of_registration && <p className="text-red-500 text-sm">{errors.date_of_registration.message}</p>}
+                    </div>
+
+                    <div className="space-y-1">
+                        <input type="number" {...register('employees_count')} placeholder="No. of Employees" className="p-2 border rounded w-full" />
+                        {errors.employees_count && <p className="text-red-500 text-sm">{errors.employees_count.message}</p>}
+                    </div>
                 </div>
             </section>
 

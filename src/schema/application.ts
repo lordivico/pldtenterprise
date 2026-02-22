@@ -38,6 +38,12 @@ const baseSchema = z.object({
     trade_name: z.string().optional(),
     business_address: z.string().min(1, "Business Address is required"),
     billing_address: z.string().min(1, "Billing Address is required"),
+    business_ownership: z.string().min(1, "Business Ownership is required"),
+    tax_profile: z.string().min(1, "Tax Profile is required"),
+    company_tin: z.string().min(1, "Company TIN is required"),
+    industry_type: z.string().min(1, "Industry Type is required"),
+    date_of_registration: z.string().min(1, "Date of Registration is required"),
+    employees_count: z.string().min(1, "Number of employees is required"),
 
     // Authorized Signatory
     signatory_name: z.string().min(1, "Signatory Name is required"),

@@ -46,6 +46,12 @@ model Application {
   business_name String
   business_address String
   billing_address String
+  business_ownership String @default("Private")
+  tax_profile        String @default("VAT_REGISTERED")
+  company_tin        String @default("")
+  industry_type      String @default("")
+  date_of_registration String @default("")
+  employees_count    String @default("")
   status        AppStatus   @default(PENDING)
   created_at    DateTime    @default(now())
   updated_at    DateTime    @updatedAt

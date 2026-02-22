@@ -94,7 +94,7 @@ export async function submitApplication(formData: FormData) {
         savedFiles.push({ path: signaturePath });
 
         // 3b. Save Documents
-        const attachmentPaths: { docType: string, filePath: string }[] = [];
+        const attachmentPaths: { docType: string, filePath: string, originalFilename: string }[] = [];
 
         // Map known file fields from the schema to their DocType enum equivalent (simplified mapping)
         // We need to know which file corresponds to which input name.
@@ -116,7 +116,7 @@ export async function submitApplication(formData: FormData) {
             await writeFile(filePath, buffer);
             savedFiles.push({ path: filePath });
 
-            attachmentPaths.push({ docType, filePath });
+            attachmentPaths.push({ docType, filePath, originalFilename: file.name });
         }
 
         // 4. Database Transaction
@@ -130,9 +130,15 @@ export async function submitApplication(formData: FormData) {
                     business_name: rawData.business_name || '',
                     business_address: rawData.business_address || '',
                     billing_address: rawData.billing_address || '',
+                    business_ownership: rawData.business_ownership || 'Private',
+                    tax_profile: rawData.tax_profile || 'VAT_REGISTERED',
+                    company_tin: rawData.company_tin || '',
+                    industry_type: rawData.industry_type || '',
+                    date_of_registration: rawData.date_of_registration || '',
+                    employees_count: rawData.employees_count || '',
 
                     // Create Signatory Relation
-                    signatory: {
+                    signatories: {
                         create: {
                             name: rawData.signatory_name || '',
                             designation: rawData.signatory_designation || '',
@@ -148,7 +154,8 @@ export async function submitApplication(formData: FormData) {
                     attachments: {
                         create: attachmentPaths.map(att => ({
                             doc_type: att.docType, // Ensure this matches Prisma Enum or String
-                            file_path: att.filePath
+                            file_path: att.filePath,
+                            original_filename: att.originalFilename
                         }))
                     }
                 }
