@@ -1,36 +1,39 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Enterprise ISP Application System
+
+A Next.js application designed to streamline the ISP application process for enterprise clients. It features dynamic form generation, digital signature capturing, automated PDF mapping/generation, and an admin dashboard for pipeline management and configuration.
+
+## Key Features
+
+*   **Dynamic Application Forms**: Interactive forms with conditional fields and document uploads using React Hook Form and Zod validation.
+*   **Digital Signatures**: Built-in signature canvas to capture client signatures as base64 images securely.
+*   **Automated PDF Generation**: Maps form responses onto official ISP PDF templates (like BCIF) using `pdf-lib`.
+*   **Interactive PDF Mapper UI**: A dedicated admin interface (`/admin/graph`) to visually drag, drop, and map field coordinates onto new PDF form templates and save configurations dynamically.
+*   **Admin Dashboard**: Manage applications, download completed forms with zipped attachments, and manage PDF mappings.
+
+## Technology Stack
+
+*   **Framework**: Next.js (App Router)
+*   **Database**: MariaDB with Prisma ORM
+*   **Forms & Validation**: React Hook Form, Zod
+*   **PDF Manipulation**: `pdf-lib`
+*   **Styling**: Tailwind CSS
+
+## Project Status
+
+**Completed Phases:**
+1.  **Backend & Database**: Next.js initialized, Prisma + MariaDB configured, schemas and migrations established.
+2.  **Dynamic Form Engine**: React Hook Form components built, conditional schemas implemented, real-time toggling active.
+3.  **Signature & File Storage**: Signature canvas implemented, Base64 PNG decoding working, document upload processing active.
+4.  **PDF Automation**: PDF field coordinates mapped, text and signature injected via `pdf-lib`, flatten and stream functions verified.
+5.  **Admin Dashboard**: Admin routes secured, application listing table built, package download (PDF + ZIP) implemented.
+6.  **PDF Coordinate Mapper UI**: `/admin/graph` interactive UI created, drag-and-drop coordinate mapping live, visual form checkbox support added, save/load API integrations functioning.
 
 ## Getting Started
 
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1.  **Clone the repository**
+2.  **Install dependencies**: `npm install`
+3.  **Set up Database**: Ensure a local MariaDB is running and set the `DATABASE_URL` in your `.env` file.
+4.  **Run Migrations**: `npx prisma db push` or `npx prisma migrate dev`
+5.  **Start Development Server**: `npm run dev`
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
